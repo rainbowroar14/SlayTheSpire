@@ -168,7 +168,8 @@ var STARTING_ENERGY = 3;
 var STARTING_GOLD = 99;
 var POTION_SLOTS = 3;
 var ACTS_TOTAL = 3;
-var FLOORS_PER_ACT = 17;
+/** Floors per act (rows 0 .. FLOORS_PER_ACT-1). Base was 17; +25% ≈ 21. */
+var FLOORS_PER_ACT = 21;
 
 /* ======================================================================
  *  STARTER CARD & RELIC DATA
@@ -281,6 +282,32 @@ var STARTER_RELICS = {
  * ====================================================================== */
 
 /**
+ * Lane counts per floor: single start, wide mid path (often 3–6 parallel nodes), then funnel to boss.
+ * @param {number} floorCount
+ * @returns {number[]}
+ */
+function _generateNodesPerRowForAct(floorCount) {
+    var rng = STS.RNG;
+    var rows = [];
+    for (var f = 0; f < floorCount; f++) {
+        if (f === 0) {
+            rows.push(1);
+        } else if (f === floorCount - 1) {
+            rows.push(1);
+        } else if (f === floorCount - 2) {
+            rows.push(1);
+        } else if (f === floorCount - 3) {
+            rows.push(rng.nextInt(1, 2));
+        } else if (f === floorCount - 4) {
+            rows.push(rng.nextInt(2, 4));
+        } else {
+            rows.push(rng.nextInt(3, 6));
+        }
+    }
+    return rows;
+}
+
+/**
  * Generate a procedural map for a single act.
  * Creates a layered graph of FLOORS_PER_ACT rows.
  *
@@ -294,7 +321,8 @@ function generateMap(act) {
     var paths = [];
     var nodeId = 0;
 
-    var nodesPerRow = [1, 3, 3, 4, 3, 3, 4, 3, 3, 4, 3, 3, 3, 2, 1, 1, 1];
+    var nodesPerRow = _generateNodesPerRowForAct(FLOORS_PER_ACT);
+    var treasureFloor = Math.max(2, Math.min(FLOORS_PER_ACT - 4, Math.round((FLOORS_PER_ACT - 1) * 0.5)));
 
     for (var floor = 0; floor < FLOORS_PER_ACT; floor++) {
         var count = nodesPerRow[floor] || 3;
@@ -317,12 +345,12 @@ function generateMap(act) {
         nodes.push(rowNodes);
     }
 
-    // Force first floor = MONSTER, last floor = BOSS, floor 8 = TREASURE
+    // Force first floor = MONSTER, last floor = BOSS, mid act = TREASURE
     if (nodes[0]) {
         for (var i = 0; i < nodes[0].length; i++) nodes[0][i].type = 'MONSTER';
     }
-    if (nodes.length >= 9 && nodes[8]) {
-        for (var i = 0; i < nodes[8].length; i++) nodes[8][i].type = 'TREASURE';
+    if (nodes[treasureFloor]) {
+        for (var i = 0; i < nodes[treasureFloor].length; i++) nodes[treasureFloor][i].type = 'TREASURE';
     }
     if (nodes[nodes.length - 1]) {
         for (var i = 0; i < nodes[nodes.length - 1].length; i++) {
@@ -388,7 +416,7 @@ function _pickNodeType(floor, act) {
         return 'MONSTER';
     }
 
-    if (floor >= 13) {
+    if (floor >= FLOORS_PER_ACT - 4) {
         // Late: rest sites and elites
         if (roll < 0.35) return 'ELITE';
         if (roll < 0.60) return 'REST';
@@ -917,7 +945,7 @@ STS.Game = {
 
         // Unplayable check
         if (card.unplayable) {
-            STS.Game.log(card.name + ' is unplayable.', 'combat');
+            STS.Game.log('That card cannot be played.', 'combat');
             return false;
         }
 
@@ -930,7 +958,7 @@ STS.Game = {
         // Energy check
         var cost = STS.Game.getCardCost(card);
         if (cost > st.player.energy && cost >= 0) {
-            STS.Game.log('Not enough energy to play ' + card.name + '.', 'combat');
+            STS.Game.log('Not enough energy to play that card.', 'combat');
             return false;
         }
 
@@ -960,7 +988,7 @@ STS.Game = {
         // --- Remove card from hand ---
         hand.splice(cardIndex, 1);
 
-        STS.Game.log('Played ' + card.name + '.', 'combat');
+        STS.Game.log('Played a card.', 'combat');
 
         // --- Apply card effects ---
         _applyCardEffects(card, target, targetIndex);
@@ -990,7 +1018,7 @@ STS.Game = {
         if (card.exhaust) {
             st.player.exhaustPile.push(card);
             STS.Events.emit('CARD_EXHAUSTED', { card: card });
-            STS.Game.log(card.name + ' exhausted.', 'combat');
+            STS.Game.log('A card was exhausted.', 'combat');
         } else {
             st.player.discardPile.push(card);
         }

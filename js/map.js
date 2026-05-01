@@ -12,9 +12,10 @@ window.STS = window.STS || {};
  *  CONSTANTS
  * ====================================================================== */
 
-var MAP_FLOORS = 15;
-var BOSS_FLOOR = 15;
-var TOTAL_FLOORS = 16;
+/** Must match game.js FLOORS_PER_ACT: rows are floor 0 .. BOSS_FLOOR (boss row). */
+var MAP_FLOORS = 20;
+var BOSS_FLOOR = 20;
+var TOTAL_FLOORS = 21;
 var NODE_RADIUS = 22;
 var NODE_HOVER_RADIUS = 28;
 var FLOOR_HEIGHT = 110;
@@ -98,15 +99,21 @@ function generateActMap(act, seed) {
     var allPaths = [];
     var nodeIndex = 0;
 
-    /* ---- Step 1: decide how many nodes per floor ---- */
+    /* ---- Step 1: decide how many nodes per floor (wide mid path, up to 6 lanes) ---- */
     var nodeCounts = [];
     for (var f = 0; f <= BOSS_FLOOR; f++) {
-        if (f === BOSS_FLOOR) {
+        if (f === 0) {
             nodeCounts.push(1);
-        } else if (f === 0) {
-            nodeCounts.push(rng.nextInt(3, 4));
-        } else {
+        } else if (f === BOSS_FLOOR) {
+            nodeCounts.push(1);
+        } else if (f === BOSS_FLOOR - 1) {
+            nodeCounts.push(1);
+        } else if (f === BOSS_FLOOR - 2) {
+            nodeCounts.push(rng.nextInt(1, 2));
+        } else if (f === BOSS_FLOOR - 3) {
             nodeCounts.push(rng.nextInt(2, 4));
+        } else {
+            nodeCounts.push(rng.nextInt(3, 6));
         }
     }
 
@@ -273,6 +280,7 @@ function assignNodeTypes(floors, allNodes, allPaths, rng, act) {
 
     var hasShop = false;
     var hasRest = false;
+    var treasureFloor = Math.max(2, Math.min(BOSS_FLOOR - 4, Math.round(BOSS_FLOOR * 0.5)));
 
     for (var f = 0; f <= BOSS_FLOOR; f++) {
         var row = floors[f];
@@ -296,8 +304,8 @@ function assignNodeTypes(floors, allNodes, allPaths, rng, act) {
                 continue;
             }
 
-            /* guaranteed TREASURE at mid-point */
-            if (f === 8) {
+            /* guaranteed TREASURE near mid-act */
+            if (f === treasureFloor) {
                 node.type = 'TREASURE';
                 continue;
             }
@@ -334,7 +342,7 @@ function assignNodeTypes(floors, allNodes, allPaths, rng, act) {
         var candidates = [];
         for (var i = 0; i < allNodes.length; i++) {
             var n = allNodes[i];
-            if (n.floor >= 3 && n.floor <= 12 && n.type === 'MONSTER') {
+            if (n.floor >= 3 && n.floor <= BOSS_FLOOR - 6 && n.type === 'MONSTER') {
                 candidates.push(n);
             }
         }
@@ -348,7 +356,7 @@ function assignNodeTypes(floors, allNodes, allPaths, rng, act) {
         var candidates = [];
         for (var i = 0; i < allNodes.length; i++) {
             var n = allNodes[i];
-            if (n.floor >= 5 && n.floor <= 11 && n.type === 'MONSTER') {
+            if (n.floor >= 5 && n.floor <= BOSS_FLOOR - 7 && n.type === 'MONSTER') {
                 candidates.push(n);
             }
         }

@@ -1446,6 +1446,11 @@ STS.UI = (function () {
                     '<div class="card-preview-desc">' + ui.formatDescription(desc) + '</div>' +
                 '</div>';
 
+            var artHost = preview.querySelector('.card-preview-art');
+            if (artHost) {
+                _attachCardArtToHost(artHost, card, 'card-preview-art-img');
+            }
+
             preview.style.display = 'block';
         },
 
@@ -1685,17 +1690,7 @@ STS.UI = (function () {
 
             var artHost = el.querySelector('.card-art');
             if (artHost) {
-                var safeId = (card.id || 'card').replace(/[^a-zA-Z0-9_-]/g, '_');
-                var artImg = document.createElement('img');
-                artImg.className = 'card-art-img';
-                artImg.alt = '';
-                artImg.draggable = false;
-                artImg.src = 'assets/cards/' + safeId + '.png';
-                artImg.onerror = function () {
-                    this.onerror = null;
-                    this.src = _cardArtDataUrl(card);
-                };
-                artHost.appendChild(artImg);
+                _attachCardArtToHost(artHost, card, 'card-art-img');
             }
 
             if (interactive) {
@@ -2279,7 +2274,26 @@ STS.UI = (function () {
     }
 
     /**
-     * Deterministic placeholder art (data URL) when assets/cards/{id}.png is missing.
+     * Load card illustration: tries assets/cards/{id}.png then illustrated procedural SVG (enemy-style mood, no letter tile).
+     */
+    function _attachCardArtToHost(host, card, imgClass) {
+        if (!host || !card) return;
+        host.innerHTML = '';
+        var safeId = (card.id || 'card').replace(/[^a-zA-Z0-9_-]/g, '_');
+        var artImg = document.createElement('img');
+        artImg.className = imgClass || 'card-art-img';
+        artImg.alt = '';
+        artImg.draggable = false;
+        artImg.src = 'assets/cards/' + safeId + '.png';
+        artImg.onerror = function () {
+            this.onerror = null;
+            this.src = _cardArtDataUrl(card);
+        };
+        host.appendChild(artImg);
+    }
+
+    /**
+     * Deterministic illustrated placeholder when assets/cards/{id}.png is missing (painted fantasy look, per-card variation).
      */
     function _cardArtDataUrl(card) {
         var id = (card && card.id) ? String(card.id) : 'CARD';
@@ -2289,37 +2303,71 @@ STS.UI = (function () {
             h |= 0;
         }
         var hue = Math.abs(h) % 360;
-        var hue2 = (hue + 52) % 360;
-        var hue3 = (hue + 110) % 360;
+        var hue2 = (hue + 42) % 360;
+        var hue3 = (hue + 96) % 360;
         var type = (card && card.type) ? String(card.type).toUpperCase() : 'ATTACK';
-        var accent = type === 'ATTACK' ? '#ff6b6b' : type === 'SKILL' ? '#69cfff' : type === 'POWER' ? '#ffc857' : '#b8b8d0';
-        var letter = (card && card.name) ? String(card.name).charAt(0).toUpperCase() : '?';
-        if (letter === '<' || letter === '&' || letter === '>') letter = '?';
+        var accent = type === 'ATTACK' ? '#ff5c5c' : type === 'SKILL' ? '#5ec8ff' : type === 'POWER' ? '#ffb347' : type === 'CURSE' ? '#c56bff' : '#9ca3c4';
+        var tilt = (Math.abs(h) % 21) - 10;
+        var motif = '';
+        if (type === 'ATTACK') {
+            motif =
+                '<g fill="none" stroke="rgba(255,240,220,0.55)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">' +
+                '<path d="M72 124 L118 36 L128 40 L84 130 Z" fill="rgba(40,12,12,0.5)"/>' +
+                '<path d="M118 36 L154 28 L132 48 Z" fill="rgba(255,200,180,0.25)"/>' +
+                '<path d="M76 118 Q100 108 122 98" opacity="0.7"/>' +
+                '<path d="M56 132 L144 120" stroke="' + accent + '" stroke-opacity="0.35" stroke-width="3"/>' +
+                '</g>' +
+                '<ellipse cx="138" cy="118" rx="28" ry="14" transform="rotate(' + tilt + ' 138 118)" fill="rgba(0,0,0,0.35)" opacity="0.5"/>';
+        } else if (type === 'SKILL') {
+            motif =
+                '<path d="M100 38 C132 38 152 62 152 92 C152 124 128 142 100 142 C72 142 48 124 48 92 C48 62 68 38 100 38 Z" fill="rgba(20,40,72,0.55)" stroke="rgba(180,220,255,0.45)" stroke-width="2"/>' +
+                '<path d="M100 56 L100 108 M76 82 L124 82" stroke="rgba(255,255,255,0.2)" stroke-width="2" stroke-linecap="round"/>' +
+                '<circle cx="100" cy="82" r="22" fill="none" stroke="' + accent + '" stroke-opacity="0.35" stroke-width="2.5"/>';
+        } else if (type === 'POWER') {
+            motif =
+                '<path d="M100 28 Q132 68 100 118 Q68 68 100 28 Z" fill="rgba(80,50,10,0.45)" stroke="rgba(255,200,120,0.5)" stroke-width="2"/>' +
+                '<path d="M100 44 L100 104 M72 74 L128 74" stroke="' + accent + '" stroke-opacity="0.4" stroke-width="2"/>' +
+                '<circle cx="100" cy="74" r="36" fill="none" stroke="rgba(255,180,80,0.2)" stroke-width="1.5"/>' +
+                '<circle cx="100" cy="74" r="8" fill="' + accent + '" fill-opacity="0.5"/>';
+        } else if (type === 'CURSE') {
+            motif =
+                '<path d="M52 48 Q100 20 148 48 L138 120 Q100 100 62 120 Z" fill="rgba(40,10,48,0.55)" stroke="rgba(200,120,255,0.4)" stroke-width="2"/>' +
+                '<path d="M76 72 L124 96 M124 72 L76 96" stroke="' + accent + '" stroke-opacity="0.45" stroke-width="2.5" stroke-linecap="round"/>';
+        } else {
+            motif =
+                '<rect x="56" y="48" width="88" height="72" rx="10" fill="rgba(36,36,44,0.6)" stroke="rgba(255,255,255,0.15)" stroke-width="2"/>' +
+                '<path d="M72 68 L128 68 M72 88 L128 88 M72 108 L108 108" stroke="rgba(255,255,255,0.12)" stroke-width="2" stroke-linecap="round"/>';
+        }
+
         var svg =
             '<svg xmlns="http://www.w3.org/2000/svg" width="200" height="168" viewBox="0 0 200 168">' +
             '<defs>' +
-            '<linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">' +
-            '<stop offset="0" stop-color="hsl(' + hue + ',55%,28%)"/>' +
-            '<stop offset="0.5" stop-color="hsl(' + hue2 + ',48%,18%)"/>' +
-            '<stop offset="1" stop-color="hsl(' + hue3 + ',40%,12%)"/>' +
+            '<linearGradient id="cdbg" x1="0" y1="0" x2="1" y2="1">' +
+            '<stop offset="0" stop-color="hsl(' + hue + ',52%,22%)"/>' +
+            '<stop offset="0.45" stop-color="hsl(' + hue2 + ',45%,14%)"/>' +
+            '<stop offset="1" stop-color="hsl(' + hue3 + ',38%,9%)"/>' +
             '</linearGradient>' +
-            '<radialGradient id="burst" cx="50%" cy="45%" r="65%">' +
-            '<stop offset="0" stop-color="' + accent + '" stop-opacity="0.45"/>' +
-            '<stop offset="0.45" stop-color="' + accent + '" stop-opacity="0.12"/>' +
+            '<radialGradient id="cdburst" cx="50%" cy="42%" r="68%">' +
+            '<stop offset="0" stop-color="' + accent + '" stop-opacity="0.38"/>' +
+            '<stop offset="0.5" stop-color="' + accent + '" stop-opacity="0.08"/>' +
             '<stop offset="1" stop-color="#000" stop-opacity="0"/>' +
             '</radialGradient>' +
+            '<radialGradient id="cdvig" cx="50%" cy="50%" r="75%">' +
+            '<stop offset="0.55" stop-color="rgba(0,0,0,0)"/>' +
+            '<stop offset="1" stop-color="rgba(0,0,0,0.55)"/>' +
+            '</radialGradient>' +
             '</defs>' +
-            '<rect width="200" height="168" fill="url(#bg)"/>' +
-            '<rect width="200" height="168" fill="url(#burst)"/>' +
-            '<g opacity="0.15" stroke="rgba(255,255,255,0.5)" fill="none" stroke-width="0.6">' +
-            '<path d="M100 8 L108 40 L142 40 L114 58 L124 90 L100 70 L76 90 L86 58 L58 40 L92 40 Z"/>' +
+            '<rect width="200" height="168" fill="url(#cdbg)"/>' +
+            '<rect width="200" height="168" fill="url(#cdburst)"/>' +
+            '<g opacity="0.85">' + motif + '</g>' +
+            '<g opacity="0.12" fill="none" stroke="rgba(255,255,255,0.6)" stroke-width="0.8">' +
+            '<path d="M24 40 Q100 12 176 40"/>' +
+            '<path d="M32 128 Q100 154 168 128"/>' +
             '</g>' +
-            '<rect x="4" y="4" width="192" height="160" fill="none" stroke="rgba(255,255,255,0.22)" stroke-width="2"/>' +
-            '<rect x="10" y="10" width="180" height="148" fill="none" stroke="rgba(0,0,0,0.35)" stroke-width="1"/>' +
-            '<path d="M12 156 L188 156" stroke="' + accent + '" stroke-opacity="0.35" stroke-width="2"/>' +
-            '<text x="100" y="104" text-anchor="middle" fill="rgba(255,255,255,0.16)" font-size="72" font-weight="900" font-family="Georgia,serif">' +
-            letter +
-            '</text></svg>';
+            '<rect width="200" height="168" fill="url(#cdvig)"/>' +
+            '<rect x="3" y="3" width="194" height="162" rx="4" fill="none" stroke="rgba(255,255,255,0.18)" stroke-width="2"/>' +
+            '<rect x="8" y="8" width="184" height="152" rx="2" fill="none" stroke="rgba(0,0,0,0.4)" stroke-width="1"/>' +
+            '</svg>';
         return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
     }
 
@@ -3147,7 +3195,8 @@ STS.UI = (function () {
         '.card-preview-card.card-upgraded { border-color: #7fff00 !important; }',
         '.card-preview-cost { font-size: 2rem; font-weight: 900; color: #ffd700; }',
         '.card-preview-name { font-size: 1.2rem; font-weight: 700; color: #fff; margin: 8px 0; }',
-        '.card-preview-art { height: 100px; background: rgba(255,255,255,0.05); border-radius: 6px; margin: 8px 0; }',
+        '.card-preview-art { position: relative; height: 100px; background: rgba(255,255,255,0.05); border-radius: 6px; margin: 8px 0; overflow: hidden; }',
+        '.card-preview-art-img { width: 100%; height: 100%; object-fit: cover; display: block; pointer-events: none; }',
         '.card-preview-type { font-size: 0.8rem; color: #999; text-transform: uppercase; letter-spacing: 0.1em; margin: 4px 0; }',
         '.card-preview-desc { font-size: 0.9rem; color: #ddd; line-height: 1.5; }',
 
