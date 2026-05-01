@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200">
+  <defs>
+    <radialGradient id="e-the_champ" cx="50%" cy="40%" r="70%">
+      <stop offset="0" stop-color="hsl(271,35%,35%)"/>
+      <stop offset="1" stop-color="hsl(311,30%,8%)"/>
+    </radialGradient>
+  </defs>
+  <rect width="200" height="200" fill="url(#e-the_champ)"/>
+  <g transform="translate(0,5)"><ellipse cx="100" cy="85" rx="48" ry="65" fill="rgba(180,50,50,0.9)" stroke="rgba(255,200,80,0.7)" stroke-width="3"/>
+    <rect x="75" y="35" width="50" height="25" rx="4" fill="rgba(220,180,60,0.9)"/></g>
+</svg>

@@ -68,7 +68,7 @@ STS.Enemies = (function () {
         id: 'JAW_WORM',
         name: 'Jaw Worm',
         hpRange: [40, 44],
-        image: 'assets/enemies/jaw_worm.png',
+        image: 'assets/enemies/jaw_worm.svg',
         type: 'NORMAL',
         act: 1,
         moveset: [
@@ -93,7 +93,7 @@ STS.Enemies = (function () {
         id: 'CULTIST',
         name: 'Cultist',
         hpRange: [48, 54],
-        image: 'assets/enemies/cultist.png',
+        image: 'assets/enemies/cultist.svg',
         type: 'NORMAL',
         act: 1,
         moveset: [
@@ -113,7 +113,7 @@ STS.Enemies = (function () {
         id: 'RED_LOUSE',
         name: 'Red Louse',
         hpRange: [10, 15],
-        image: 'assets/enemies/red_louse.png',
+        image: 'assets/enemies/red_louse.svg',
         type: 'NORMAL',
         act: 1,
         initPowers: function () { return { curlUp: randInt(3, 7) }; },
@@ -143,7 +143,7 @@ STS.Enemies = (function () {
         id: 'GREEN_LOUSE',
         name: 'Green Louse',
         hpRange: [11, 17],
-        image: 'assets/enemies/red_louse.png',
+        image: 'assets/enemies/red_louse.svg',
         type: 'NORMAL',
         act: 1,
         initPowers: function () { return { curlUp: randInt(3, 7) }; },
@@ -173,7 +173,7 @@ STS.Enemies = (function () {
         id: 'ACID_SLIME_M',
         name: 'Acid Slime (M)',
         hpRange: [28, 32],
-        image: 'assets/enemies/slime_boss.png',
+        image: 'assets/enemies/slime_boss.svg',
         type: 'NORMAL',
         act: 1,
         moveset: [
@@ -198,7 +198,7 @@ STS.Enemies = (function () {
         id: 'SPIKE_SLIME_M',
         name: 'Spike Slime (M)',
         hpRange: [28, 32],
-        image: 'assets/enemies/slime_boss.png',
+        image: 'assets/enemies/slime_boss.svg',
         type: 'NORMAL',
         act: 1,
         moveset: [
@@ -218,7 +218,7 @@ STS.Enemies = (function () {
         id: 'SMALL_ACID_SLIME',
         name: 'Acid Slime (S)',
         hpRange: [8, 12],
-        image: 'assets/enemies/slime_boss.png',
+        image: 'assets/enemies/slime_boss.svg',
         type: 'NORMAL',
         act: 1,
         moveset: [
@@ -237,7 +237,7 @@ STS.Enemies = (function () {
         id: 'SMALL_SPIKE_SLIME',
         name: 'Spike Slime (S)',
         hpRange: [10, 14],
-        image: 'assets/enemies/slime_boss.png',
+        image: 'assets/enemies/slime_boss.svg',
         type: 'NORMAL',
         act: 1,
         moveset: [
@@ -253,7 +253,7 @@ STS.Enemies = (function () {
         id: 'GREMLIN_NOB',
         name: 'Gremlin Nob',
         hpRange: [82, 86],
-        image: 'assets/enemies/gremlin.png',
+        image: 'assets/enemies/gremlin.svg',
         type: 'ELITE',
         act: 1,
         moveset: [
@@ -281,7 +281,7 @@ STS.Enemies = (function () {
         id: 'LAGAVULIN',
         name: 'Lagavulin',
         hpRange: [108, 112],
-        image: 'assets/enemies/guardian.png',
+        image: 'assets/enemies/guardian.svg',
         type: 'ELITE',
         act: 1,
         moveset: [
@@ -316,7 +316,7 @@ STS.Enemies = (function () {
         id: 'SENTRY',
         name: 'Sentry',
         hpRange: [38, 42],
-        image: 'assets/enemies/sentry.png',
+        image: 'assets/enemies/sentry.svg',
         type: 'ELITE',
         act: 1,
         moveset: [
@@ -341,7 +341,7 @@ STS.Enemies = (function () {
         id: 'THE_GUARDIAN',
         name: 'The Guardian',
         hpRange: [240, 240],
-        image: 'assets/enemies/guardian.png',
+        image: 'assets/enemies/guardian.svg',
         type: 'BOSS',
         act: 1,
         moveset: [
@@ -396,7 +396,7 @@ STS.Enemies = (function () {
         id: 'HEXAGHOST',
         name: 'Hexaghost',
         hpRange: [250, 250],
-        image: 'assets/enemies/hexaghost.png',
+        image: 'assets/enemies/hexaghost.svg',
         type: 'BOSS',
         act: 1,
         moveset: [
@@ -427,7 +427,7 @@ STS.Enemies = (function () {
         id: 'SLIME_BOSS',
         name: 'Slime Boss',
         hpRange: [140, 140],
-        image: 'assets/enemies/slime_boss.png',
+        image: 'assets/enemies/slime_boss.svg',
         type: 'BOSS',
         act: 1,
         moveset: [
@@ -467,7 +467,7 @@ STS.Enemies = (function () {
         id: 'CHOSEN',
         name: 'Chosen',
         hpRange: [95, 99],
-        image: 'assets/enemies/chosen.png',
+        image: 'assets/enemies/chosen.svg',
         type: 'NORMAL',
         act: 2,
         moveset: [
@@ -492,7 +492,7 @@ STS.Enemies = (function () {
         id: 'BYRD',
         name: 'Byrd',
         hpRange: [25, 31],
-        image: 'assets/enemies/byrd.png',
+        image: 'assets/enemies/byrd.svg',
         type: 'NORMAL',
         act: 2,
         moveset: [
@@ -529,7 +529,7 @@ STS.Enemies = (function () {
         id: 'SHELLED_PARASITE',
         name: 'Shelled Parasite',
         hpRange: [68, 72],
-        image: 'assets/enemies/shelled_parasite.png',
+        image: 'assets/enemies/shelled_parasite.svg',
         type: 'NORMAL',
         act: 2,
         moveset: [
@@ -562,7 +562,7 @@ STS.Enemies = (function () {
         id: 'BOOK_OF_STABBING',
         name: 'Book of Stabbing',
         hpRange: [160, 164],
-        image: 'assets/enemies/book_of_stabbing.png',
+        image: 'assets/enemies/book_of_stabbing.svg',
         type: 'ELITE',
         act: 2,
         moveset: [
@@ -591,7 +591,7 @@ STS.Enemies = (function () {
         id: 'GREMLIN_LEADER',
         name: 'Gremlin Leader',
         hpRange: [140, 148],
-        image: 'assets/enemies/gremlin.png',
+        image: 'assets/enemies/gremlin.svg',
         type: 'ELITE',
         act: 2,
         moveset: [
@@ -615,7 +615,7 @@ STS.Enemies = (function () {
         id: 'MAD_GREMLIN',
         name: 'Mad Gremlin',
         hpRange: [20, 20],
-        image: 'assets/enemies/gremlin.png',
+        image: 'assets/enemies/gremlin.svg',
         type: 'MINION',
         act: 2,
         moveset: [
@@ -628,7 +628,7 @@ STS.Enemies = (function () {
         id: 'SNEAKY_GREMLIN',
         name: 'Sneaky Gremlin',
         hpRange: [10, 10],
-        image: 'assets/enemies/gremlin.png',
+        image: 'assets/enemies/gremlin.svg',
         type: 'MINION',
         act: 2,
         moveset: [
@@ -641,7 +641,7 @@ STS.Enemies = (function () {
         id: 'FAT_GREMLIN',
         name: 'Fat Gremlin',
         hpRange: [13, 13],
-        image: 'assets/enemies/gremlin.png',
+        image: 'assets/enemies/gremlin.svg',
         type: 'MINION',
         act: 2,
         moveset: [
@@ -654,7 +654,7 @@ STS.Enemies = (function () {
         id: 'SHIELD_GREMLIN',
         name: 'Shield Gremlin',
         hpRange: [12, 12],
-        image: 'assets/enemies/gremlin.png',
+        image: 'assets/enemies/gremlin.svg',
         type: 'MINION',
         act: 2,
         moveset: [
@@ -670,7 +670,7 @@ STS.Enemies = (function () {
         id: 'THE_CHAMP',
         name: 'The Champ',
         hpRange: [420, 420],
-        image: 'assets/enemies/the_champ.png',
+        image: 'assets/enemies/the_champ.svg',
         type: 'BOSS',
         act: 2,
         moveset: [

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200">
+  <defs>
+    <radialGradient id="e-red_louse" cx="50%" cy="40%" r="70%">
+      <stop offset="0" stop-color="hsl(126,35%,35%)"/>
+      <stop offset="1" stop-color="hsl(166,30%,8%)"/>
+    </radialGradient>
+  </defs>
+  <rect width="200" height="200" fill="url(#e-red_louse)"/>
+  <g transform="translate(0,5)"><ellipse cx="100" cy="100" rx="55" ry="40" fill="rgba(180,40,40,0.9)" stroke="rgba(255,120,100,0.6)" stroke-width="2"/>
+    <path d="M50 100 L30 85 M50 110 L25 110 M150 100 L170 85 M150 110 L175 110" stroke="rgba(100,20,20,0.8)" stroke-width="3" stroke-linecap="round"/></g>
+</svg>

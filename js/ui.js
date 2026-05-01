@@ -219,11 +219,11 @@ STS.UI = (function () {
 
             var act = (st.map && st.map.currentAct) || 1;
             var combatBgByAct = {
-                1: 'assets/backgrounds/combat_bg.png',
-                2: 'assets/backgrounds/combat_bg.png',
-                3: 'assets/backgrounds/title_bg.png'
+                1: 'assets/backgrounds/combat_bg.svg',
+                2: 'assets/backgrounds/combat_bg.svg',
+                3: 'assets/backgrounds/title_bg.svg'
             };
-            var combatBgUrl = combatBgByAct[act] || 'assets/backgrounds/combat_bg.png';
+            var combatBgUrl = combatBgByAct[act] || 'assets/backgrounds/combat_bg.svg';
             var combatBgStyle =
                 'background-image:linear-gradient(180deg,rgba(8,10,22,0.65) 0%,rgba(12,14,32,0.5) 45%,rgba(6,8,18,0.75) 100%),url(\'' +
                 combatBgUrl +
@@ -305,10 +305,10 @@ STS.UI = (function () {
 
             var act = st.map.currentAct || 1;
             var actBg = {
-                1: "assets/backgrounds/map_bg.png",
-                2: "assets/backgrounds/combat_bg.png",
-                3: "assets/backgrounds/title_bg.png"
-            }[act] || "assets/backgrounds/map_bg.png";
+                1: "assets/backgrounds/map_bg.svg",
+                2: "assets/backgrounds/combat_bg.svg",
+                3: "assets/backgrounds/title_bg.svg"
+            }[act] || "assets/backgrounds/map_bg.svg";
 
             var p = st.player;
             var classLine = p.characterClass || 'the Ironclad';
@@ -318,9 +318,11 @@ STS.UI = (function () {
             for (var si = 0; si < potionSlots; si++) {
                 var pot = p.potions[si];
                 if (pot) {
+                    var pimg = (pot.image || '').replace(/[^a-z0-9-]/gi, '') || 'potion-fire';
                     potionHtml +=
                         '<div class="map-hud-potion map-hud-potion-filled" data-map-potion-idx="' + si + '" style="--potion-c:' + (pot.color || '#88ccff') + '">' +
-                        '<span class="map-hud-potion-ic">🧪</span></div>';
+                        '<img class="map-hud-potion-img" src="assets/potions/' + pimg + '.svg" alt="" draggable="false" onerror="this.style.display=\'none\';var s=this.nextElementSibling;if(s)s.style.display=\'inline\'">' +
+                        '<span class="map-hud-potion-ic" style="display:none">🧪</span></div>';
                 } else {
                     potionHtml += '<div class="map-hud-potion map-hud-potion-empty" title="Empty potion slot"></div>';
                 }
@@ -466,7 +468,7 @@ STS.UI = (function () {
                 var affordable = st.player.gold >= item.price ? '' : ' shop-item-expensive';
                 html +=
                     '<div class="shop-item' + soldClass + affordable + '" data-type="relic" data-index="' + i + '">' +
-                        '<div class="shop-relic-icon">' + (item.relic.icon || '🔮') + '</div>' +
+                        '<div class="shop-relic-icon"><img class="shop-relic-img" src="assets/relics/' + _escHtml(item.relic.image || String(item.relic.id || '').toLowerCase().replace(/_/g, '-')) + '.svg" alt="" draggable="false" onerror="this.style.display=\'none\';var s=this.nextElementSibling;if(s)s.style.display=\'block\'"><span class="shop-relic-fallback" style="display:none">' + (item.relic.icon || '🔮') + '</span></div>' +
                         '<div class="shop-item-name">' + (item.relic.name || 'Relic') + '</div>' +
                         '<div class="shop-price">' + (item.sold ? 'SOLD' : '💰 ' + item.price) + '</div>' +
                     '</div>';
@@ -481,7 +483,7 @@ STS.UI = (function () {
                 var affordable = st.player.gold >= item.price ? '' : ' shop-item-expensive';
                 html +=
                     '<div class="shop-item' + soldClass + affordable + '" data-type="potion" data-index="' + i + '">' +
-                        '<div class="shop-potion-icon" style="color:' + (item.potion.color || '#fff') + '">🧪</div>' +
+                        '<div class="shop-potion-icon" style="color:' + (item.potion.color || '#fff') + '"><img class="shop-potion-img" src="assets/potions/' + _escHtml(item.potion.image || String(item.potion.id || '').toLowerCase().replace(/_/g, '-')) + '.svg" alt="" draggable="false" onerror="this.style.display=\'none\';var s=this.nextElementSibling;if(s)s.style.display=\'block\'"><span class="shop-potion-fallback" style="display:none">🧪</span></div>' +
                         '<div class="shop-item-name">' + (item.potion.name || 'Potion') + '</div>' +
                         '<div class="shop-price">' + (item.sold ? 'SOLD' : '💰 ' + item.price) + '</div>' +
                     '</div>';
@@ -971,7 +973,7 @@ STS.UI = (function () {
                 : '';
 
             container.innerHTML =
-                '<div class="player-avatar"><img src="assets/hero.png" alt="' + _escHtml(p.name) + '" onerror="this.style.display=\'none\'"><div class="player-avatar-fallback">⚔️</div></div>' +
+                '<div class="player-avatar"><img src="assets/hero.svg" alt="' + _escHtml(p.name) + '" draggable="false" onerror="this.onerror=null;this.src=\'assets/hero.png\';this.onerror=function(){this.style.display=\'none\'}"><div class="player-avatar-fallback">⚔️</div></div>' +
                 '<div class="player-name">' + _escHtml(p.name) + '</div>' +
                 '<div class="player-hp-bar">' +
                     '<div class="hp-bar-fill" style="width:' + hpPercent + '%"></div>' +
@@ -1711,9 +1713,21 @@ STS.UI = (function () {
             el.dataset.relicId = relic.id;
             el.title = relic.name;
 
-            el.innerHTML = '<span class="relic-emoji">' + (relic.icon || '🔮') + '</span>';
+            var artSlug = relic.image || String(relic.id || '').toLowerCase().replace(/_/g, '-');
+            el.innerHTML =
+                '<img class="relic-art-img" src="assets/relics/' + _escHtml(artSlug) + '.svg" alt="" draggable="false">' +
+                '<span class="relic-emoji" style="display:none">' + (relic.icon || '🔮') + '</span>';
             if (relic.counter !== undefined && relic.counter >= 0) {
                 el.innerHTML += '<span class="relic-counter">' + relic.counter + '</span>';
+            }
+
+            var rimg = el.querySelector('.relic-art-img');
+            if (rimg) {
+                rimg.addEventListener('error', function () {
+                    rimg.style.display = 'none';
+                    var sp = el.querySelector('.relic-emoji');
+                    if (sp) sp.style.display = 'block';
+                });
             }
 
             el.addEventListener('mouseenter', function () {
@@ -1734,9 +1748,19 @@ STS.UI = (function () {
 
             if (potion) {
                 el.classList.add('potion-filled');
+                var pslug = potion.image || String(potion.id || '').toLowerCase().replace(/_/g, '-');
                 el.innerHTML =
-                    '<span class="potion-icon" style="color:' + (potion.color || '#fff') + '">🧪</span>' +
+                    '<img class="potion-art-img" src="assets/potions/' + _escHtml(pslug) + '.svg" alt="" draggable="false">' +
+                    '<span class="potion-icon potion-icon-fallback" style="display:none;color:' + (potion.color || '#fff') + '">🧪</span>' +
                     '<span class="potion-name-label">' + _escHtml(potion.name) + '</span>';
+                var pimg = el.querySelector('.potion-art-img');
+                if (pimg) {
+                    pimg.addEventListener('error', function () {
+                        pimg.style.display = 'none';
+                        var fb = el.querySelector('.potion-icon-fallback');
+                        if (fb) fb.style.display = 'block';
+                    });
+                }
 
                 el.addEventListener('click', function () {
                     ui._onPotionUse(slotIndex);
@@ -1780,7 +1804,7 @@ STS.UI = (function () {
                     '<span class="intent-value"></span>' +
                 '</div>' +
                 '<div class="enemy-image-container">' +
-                    '<img src="' + (enemy.image || 'assets/enemies/default.png') + '" class="enemy-image" alt="' + _escHtml(enemy.name) + '" draggable="false" onerror="this.style.display=\'none\'">' +
+                    '<img src="' + (enemy.image || 'assets/enemies/default.svg') + '" class="enemy-image" alt="' + _escHtml(enemy.name) + '" draggable="false" onerror="this.style.display=\'none\'">' +
                     '<div class="enemy-image-fallback">👹</div>' +
                     blockHtml +
                 '</div>' +
@@ -2287,7 +2311,11 @@ STS.UI = (function () {
         artImg.src = 'assets/cards/' + safeId + '.png';
         artImg.onerror = function () {
             this.onerror = null;
-            this.src = _cardArtDataUrl(card);
+            this.src = 'assets/cards/' + safeId + '.svg';
+            this.onerror = function () {
+                this.onerror = null;
+                this.src = _cardArtDataUrl(card);
+            };
         };
         host.appendChild(artImg);
     }
@@ -2407,21 +2435,10 @@ STS.UI = (function () {
     }
 
     function _getEventImageUrl(ev) {
-        var st = _state();
-        var runSeed = (st && st.run && st.run.seed != null) ? String(st.run.seed) : '0';
-        var base = (ev && ev.imagePrompt) ? String(ev.imagePrompt) : (
-            (ev && ev.name ? ev.name : 'Mystery') + ', ' + (ev && ev.description ? ev.description : '') +
-            ', dark fantasy roguelike game event, single scene illustration, dramatic lighting, no text, no watermark'
-        );
-        var s = (ev && ev.id ? String(ev.id) : 'ev') + runSeed;
-        var seed = 0;
-        for (var j = 0; j < s.length; j++) {
-            seed = ((seed << 5) - seed) + s.charCodeAt(j);
-            seed |= 0;
+        if (ev && ev.image) {
+            return 'assets/events/' + ev.image + '.svg';
         }
-        seed = Math.abs(seed) % 1000000;
-        return 'https://image.pollinations.ai/prompt/' + encodeURIComponent(base) +
-            '?width=640&height=400&nologo=true&seed=' + seed;
+        return 'assets/events/event-fish.svg';
     }
 
     function _escHtml(str) {
@@ -3094,7 +3111,7 @@ STS.UI = (function () {
         '.enemy-image { width: 100%; height: 100%; object-fit: contain; object-position: bottom center; image-rendering: auto; filter: drop-shadow(0 12px 20px rgba(0,0,0,0.55)); }',
         '.enemy-image-fallback { font-size: clamp(3rem, 8vmin, 5rem); opacity: 0.85; }',
         '.enemy-name { font-size: 0.85rem; font-weight: 700; margin: 4px 0; color: #ff8888; }',
-        '.enemy-intent { position: absolute; top: clamp(-48px, -6vmin, -32px); left: 50%; transform: translateX(-50%); display: flex; align-items: center; gap: 4px; font-size: clamp(1rem, 2.2vmin, 1.25rem); font-weight: 700; white-space: nowrap; z-index: 5; text-shadow: 0 2px 6px rgba(0,0,0,0.9); }',
+        '.enemy-intent { position: absolute; top: clamp(6px, 1.8vmin, 24px); left: 50%; transform: translateX(-50%); display: flex; align-items: center; gap: 4px; padding: 4px 10px; background: rgba(0,0,0,0.6); border-radius: 12px; font-size: clamp(1rem, 2.2vmin, 1.25rem); font-weight: 700; white-space: nowrap; z-index: 5; text-shadow: 0 2px 6px rgba(0,0,0,0.9); min-height: 28px; }',
         '.intent-icon { font-size: 1.3rem; }',
         '.intent-value { font-size: 1rem; }',
         '.intent-bob { transition: transform 0.1s linear; }',
@@ -3296,6 +3313,10 @@ STS.UI = (function () {
         '.map-hud-potion-empty { border: 1px solid rgba(255,255,255,0.15); background: rgba(0,0,0,0.25); opacity: 0.5; }',
         '.map-hud-potion-filled { border: 1px solid rgba(255,255,255,0.25); background: rgba(30,40,50,0.5); cursor: default; }',
         '.map-hud-potion-ic { font-size: 1.1rem; }',
+        '.map-hud-potion-img { width: 22px; height: 22px; object-fit: contain; display: block; }',
+        '.potion-art-img { width: 28px; height: 28px; object-fit: contain; display: block; margin: 0 auto 2px; }',
+        '.shop-relic-icon, .shop-potion-icon { display: flex; align-items: center; justify-content: center; min-height: 44px; }',
+        '.shop-relic-img, .shop-potion-img { width: 40px; height: 40px; object-fit: contain; display: block; }',
         '.map-hud-center { display: flex; align-items: center; justify-content: center; flex: 0 0 auto; }',
         '.map-hud-asc { font-size: 0.95rem; font-weight: 700; color: #c85a2e; text-shadow: 0 0 8px rgba(200,80,30,0.4); }',
         '.map-hud-flame { margin-right: 4px; }',
@@ -3361,7 +3382,7 @@ STS.UI = (function () {
         '.shop-item-sold { opacity: 0.3; pointer-events: none; }',
         '.shop-item-sold .shop-price { text-decoration: line-through; }',
         '.shop-item-expensive .shop-price { color: #ff4444; }',
-        '.shop-relic-icon, .shop-potion-icon { font-size: 2rem; margin-bottom: 4px; }',
+        '.shop-relic-fallback, .shop-potion-fallback { font-size: 2rem; margin-bottom: 4px; }',
         '.shop-item-name { font-size: 0.8rem; color: #ddd; margin-bottom: 4px; }',
         '.shop-price { font-weight: 700; color: #ffd700; font-size: 0.9rem; }',
         '.shop-remove { text-align: center; margin-top: 20px; }',

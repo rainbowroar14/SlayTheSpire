@@ -155,7 +155,7 @@ button {
    TITLE SCREEN
    -------------------------------------------------------------------------- */
 #title-screen {
-    background: url('../assets/backgrounds/title_bg.png') center/cover no-repeat;
+    background: url('../assets/backgrounds/title_bg.svg') center/cover no-repeat;
     position: relative;
 }
 #title-screen::before {
@@ -242,7 +242,7 @@ button {
    COMBAT SCREEN
    -------------------------------------------------------------------------- */
 #combat-screen {
-    background: url('../assets/backgrounds/combat_bg.png') center/cover no-repeat;
+    background: url('../assets/backgrounds/combat_bg.svg') center/cover no-repeat;
     justify-content: flex-end;
 }
 #combat-screen::before {
@@ -285,6 +285,13 @@ button {
     cursor: pointer;
     transition: all var(--transition-fast);
     position: relative;
+    overflow: hidden;
+}
+.relic-art-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
 }
 .relic-icon:hover {
     border-color: var(--text-gold);
@@ -384,6 +391,10 @@ button {
     pointer-events: none;
 }
 .enemy-intent {
+    position: absolute;
+    top: clamp(6px, 1.8vmin, 24px);
+    left: 50%;
+    transform: translateX(-50%);
     display: flex;
     align-items: center;
     gap: 4px;
@@ -392,8 +403,7 @@ button {
     border-radius: 12px;
     font-size: 14px;
     font-weight: 700;
-    margin-bottom: 8px;
-    animation: intentBob 2s ease-in-out infinite;
+    z-index: 5;
     min-height: 28px;
 }
 .intent-icon { font-size: 16px; }
@@ -976,7 +986,7 @@ button {
    MAP SCREEN
    -------------------------------------------------------------------------- */
 #map-screen {
-    background: url('../assets/backgrounds/map_bg.png') center/cover no-repeat;
+    background: url('../assets/backgrounds/map_bg.svg') center/cover no-repeat;
     /* Match ui.js: full-width column layout (avoid centered shrink-wrap) */
     align-items: stretch !important;
     justify-content: flex-start !important;

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200">
+  <defs>
+    <radialGradient id="e-gremlin" cx="50%" cy="40%" r="70%">
+      <stop offset="0" stop-color="hsl(38,35%,35%)"/>
+      <stop offset="1" stop-color="hsl(78,30%,8%)"/>
+    </radialGradient>
+  </defs>
+  <rect width="200" height="200" fill="url(#e-gremlin)"/>
+  <g transform="translate(0,5)"><rect x="65" y="50" width="70" height="90" rx="20" fill="rgba(90,140,60,0.9)" stroke="rgba(180,220,100,0.5)" stroke-width="2"/>
+    <polygon points="100,35 85,55 115,55" fill="rgba(200,80,80,0.9)"/></g>
+</svg>

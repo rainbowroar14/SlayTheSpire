@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200">
+  <defs>
+    <radialGradient id="e-cultist" cx="50%" cy="40%" r="70%">
+      <stop offset="0" stop-color="hsl(200,35%,35%)"/>
+      <stop offset="1" stop-color="hsl(240,30%,8%)"/>
+    </radialGradient>
+  </defs>
+  <rect width="200" height="200" fill="url(#e-cultist)"/>
+  <g transform="translate(0,5)"><ellipse cx="100" cy="90" rx="45" ry="70" fill="rgba(60,20,80,0.9)" stroke="rgba(180,80,200,0.5)" stroke-width="2"/>
+    <circle cx="100" cy="55" r="28" fill="rgba(40,10,50,0.95)" stroke="rgba(200,100,220,0.4)" stroke-width="2"/></g>
+</svg>

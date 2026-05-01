@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200">
+  <defs>
+    <radialGradient id="e-hexaghost" cx="50%" cy="40%" r="70%">
+      <stop offset="0" stop-color="hsl(239,35%,35%)"/>
+      <stop offset="1" stop-color="hsl(279,30%,8%)"/>
+    </radialGradient>
+  </defs>
+  <rect width="200" height="200" fill="url(#e-hexaghost)"/>
+  <g transform="translate(0,5)"><path d="M100 25 L145 50 L145 100 L100 125 L55 100 L55 50 Z" fill="rgba(80,40,120,0.85)" stroke="rgba(200,120,255,0.7)" stroke-width="2"/>
+    <circle cx="100" cy="75" r="22" fill="rgba(255,200,100,0.35)"/></g>
+</svg>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200">
+  <defs>
+    <radialGradient id="e-byrd" cx="50%" cy="40%" r="70%">
+      <stop offset="0" stop-color="hsl(313,35%,35%)"/>
+      <stop offset="1" stop-color="hsl(353,30%,8%)"/>
+    </radialGradient>
+  </defs>
+  <rect width="200" height="200" fill="url(#e-byrd)"/>
+  <g transform="translate(0,5)"><ellipse cx="100" cy="95" rx="50" ry="35" fill="rgba(180,140,80,0.9)" stroke="rgba(255,220,150,0.5)" stroke-width="2"/>
+    <polygon points="100,45 75,75 125,75" fill="rgba(200,100,60,0.9)"/></g>
+</svg>

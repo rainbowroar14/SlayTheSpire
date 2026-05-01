@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200">
+  <defs>
+    <radialGradient id="e-slime_boss" cx="50%" cy="40%" r="70%">
+      <stop offset="0" stop-color="hsl(340,35%,35%)"/>
+      <stop offset="1" stop-color="hsl(20,30%,8%)"/>
+    </radialGradient>
+  </defs>
+  <rect width="200" height="200" fill="url(#e-slime_boss)"/>
+  <g transform="translate(0,5)"><path d="M40 130 Q100 40 160 130 Z" fill="rgba(50,200,120,0.75)" stroke="rgba(150,255,200,0.7)" stroke-width="3"/>
+    <circle cx="85" cy="95" r="10" fill="rgba(0,40,20,0.6)"/><circle cx="115" cy="95" r="10" fill="rgba(0,40,20,0.6)"/></g>
+</svg>
