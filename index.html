@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slay the Spire</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚔️</text></svg>">
+    <style>
+        #boot-splash {
+            position: fixed;
+            inset: 0;
+            z-index: 99999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: #0a0a14;
+            color: #888;
+            font-family: 'Segoe UI', sans-serif;
+            letter-spacing: 0.2em;
+            font-size: 13px;
+        }
+        #boot-splash .ring {
+            width: 48px;
+            height: 48px;
+            border: 3px solid rgba(255,215,0,0.2);
+            border-top-color: #ffd700;
+            border-radius: 50%;
+            animation: bootspin 0.7s linear infinite;
+            margin-bottom: 20px;
+        }
+        @keyframes bootspin { to { transform: rotate(360deg); } }
+        #boot-splash.hidden { display: none; }
+    </style>
+</head>
+<body>
+    <div id="boot-splash" aria-hidden="true">
+        <div class="ring"></div>
+        <span>LOADING</span>
+    </div>
+
+    <div id="game-container" class="game-container">
+        <canvas id="particles-canvas" style="position:absolute;inset:0;z-index:5;pointer-events:none;"></canvas>
+    </div>
+
+    <script src="js/game.js"></script>
+    <script src="js/effects.js"></script>
+    <script src="js/cards.js"></script>
+    <script src="js/enemies.js"></script>
+    <script src="js/relics.js"></script>
+    <script src="js/shop.js"></script>
+    <script src="js/events.js"></script>
+    <script src="js/map.js"></script>
+    <script src="js/particles.js"></script>
+    <script src="js/audio.js"></script>
+    <script src="js/ui.js"></script>
+
+    <script>
+    (function () {
+        'use strict';
+
+        function hideSplash() {
+            var s = document.getElementById('boot-splash');
+            if (s) {
+                s.classList.add('hidden');
+                s.style.display = 'none';
+            }
+        }
+
+        function boot() {
+            try {
+                if (STS.UI && typeof STS.UI.init === 'function') STS.UI.init();
+            } catch (e) { console.error('[Boot] UI:', e); }
+
+            try {
+                if (STS.Game && typeof STS.Game.init === 'function') STS.Game.init();
+            } catch (e) {
+                console.error('[Boot] Game:', e);
+                hideSplash();
+                document.body.insertAdjacentHTML('beforeend',
+                    '<div style="position:fixed;inset:0;background:#200;color:#f88;padding:24px;font-family:monospace;z-index:100000;overflow:auto;">' +
+                    '<h2>Could not start game</h2><pre>' + (e && e.stack ? e.stack : String(e)) + '</pre></div>');
+                return;
+            }
+
+            try {
+                var p = document.getElementById('particles-canvas');
+                if (p && STS.Particles && typeof STS.Particles.init === 'function') STS.Particles.init('particles-canvas');
+            } catch (e) { console.warn('[Boot] Particles:', e); }
+
+            hideSplash();
+        }
+
+        if (document.readyState === 'complete') boot();
+        else window.addEventListener('load', boot);
+
+        document.addEventListener('click', function once() {
+            try {
+                if (STS.Audio && typeof STS.Audio.init === 'function') STS.Audio.init();
+            } catch (e) { /* ignore */ }
+            document.removeEventListener('click', once);
+        }, { once: true });
+    })();
+    </script>
+</body>
+</html>
